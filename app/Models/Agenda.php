@@ -12,4 +12,8 @@ class Agenda extends Model
     public function tasks(){
         return $this->hasMany(Task::class, 'agenda');
     }
+
+    public function auditor(){
+        return $this->belongsTo(Auditor::class, 'auditor');
+    }
 }

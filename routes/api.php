@@ -3,7 +3,6 @@
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\AuditorController;
 use App\Http\Controllers\TaskController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,18 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('auditors')->group(function()
-{
-    Route::post('token', [AuditorController::class, 'createToken'])->name('auditors.create-token');
-    Route::middleware('auth:sanctum')->group(function()
-    {
-        Route::delete('token', [AuditorController::class, 'deleteToken'])->name('auditors.delete-token');
-        Route::resource('auditors', AuditorController::class)->only(['show']);
-    });
-});
-
 Route::middleware('auth:sanctum')->group(function()
 {
+    Route::prefix('auditors')->name('auditors.')->group(function()
+    {
+        Route::post('token', [AuditorController::class, 'createToken'])->name('create-token')
+            ->withoutMiddleware('auth:sanctum');
+        Route::get('me', [AuditorController::class, 'showMe'])->name('show-me');
+        Route::delete('token', [AuditorController::class, 'deleteToken'])->name('delete-token');
+    });
+
+    Route::resource('auditors', AuditorController::class)->only(['show']);
     Route::resource('agendas', AgendaController::class)->only(['index', 'show', 'update']);
     Route::resource('tasks', TaskController::class)->only(['show', 'update']);
 });

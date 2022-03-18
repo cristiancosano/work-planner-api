@@ -33,7 +33,7 @@ class AgendaController extends Controller
      */
     public function show(Agenda $agenda): Response
     {
-        $this->authorize('update', $agenda);
+        $this->authorize('view', $agenda);
         return response($agenda->fresh('tasks'));
     }
 

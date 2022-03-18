@@ -12,14 +12,20 @@ class AuditorController extends Controller
 
 
     /**
-     * Display the specified resource.
+     * Display the specified auditor.
      *
      * @param Auditor $auditor
      * @return Response
      */
     public function show(Auditor $auditor)
     {
-        //
+        $this->authorize('view', $auditor);
+        return response($auditor->fresh('agendas'));
+    }
+
+    public function showMe(Request $request)
+    {
+        return $this->show($request->user());
     }
 
     /**
