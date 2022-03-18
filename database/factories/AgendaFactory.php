@@ -20,7 +20,7 @@ class AgendaFactory extends Factory
     {
         return [
             'name' => $this->faker->realText(50),
-            'auditor' => Auditor::inRandomOrder()->limit(1)->first(),
+            'auditor' => $this->faker->randomElement([Auditor::inRandomOrder()->limit(1)->first(), null])
         ];
     }
 }

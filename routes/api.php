@@ -17,13 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('auditor')->group(function(){
-    Route::post('token', [AuditorController::class, 'createToken']);
-    Route::delete('token', [AuditorController::class, 'deleteToken'])->middleware('auth:sanctum');
+Route::prefix('auditors')->group(function()
+{
+    Route::post('token', [AuditorController::class, 'createToken'])->name('auditors.create-token');
+    Route::middleware('auth:sanctum')->group(function()
+    {
+        Route::delete('token', [AuditorController::class, 'deleteToken'])->name('auditors.delete-token');
+        Route::resource('auditors', AuditorController::class)->only(['show']);
+    });
 });
 
-Route::middleware('auth:sanctum')->group(function(){
-    Route::resource('auditor', AuditorController::class)->only(['show']);
-    Route::resource('agenda', AgendaController::class)->only(['index, show, put']);
-    Route::resource('task', TaskController::class)->only(['show, put']);
+Route::middleware('auth:sanctum')->group(function()
+{
+    Route::resource('agendas', AgendaController::class)->only(['index', 'show', 'update']);
+    Route::resource('tasks', TaskController::class)->only(['show', 'update']);
 });
