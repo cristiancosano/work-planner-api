@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('agendas', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->unsignedBigInteger('auditor');
+            $table->unsignedBigInteger('auditor')->nullable();
             $table->timestamps();
 
             $table->foreign('auditor')->references('id')->on('auditors');

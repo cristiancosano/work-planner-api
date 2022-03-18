@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Auditor::factory(100)->create();
+        Auditor::factory(3)->create();
         Agenda::factory(20)->create();
         Task::factory(100)->create();
     }
