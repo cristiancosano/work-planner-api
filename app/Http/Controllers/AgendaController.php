@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agenda;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -32,19 +33,22 @@ class AgendaController extends Controller
      */
     public function show(Agenda $agenda): Response
     {
+        $this->authorize('update', $agenda);
         return response($agenda->fresh('tasks'));
     }
 
     /**
-     * Update the specified agenda in storage.
+     * Update the specified agenda in storage. The user who makes the request is assigned as current auditor.
      *
      * @param Request $request
      * @param Agenda $agenda
      * @return Response
+     * @throws AuthorizationException
      */
     public function update(Request $request, Agenda $agenda): Response
     {
-        $agenda->auditor = $request->get('auditor');
+        $this->authorize('update', $agenda);
+        $agenda->auditor = $request->user()->id;
         return response(['saved' => $agenda->save()]);
 
     }
