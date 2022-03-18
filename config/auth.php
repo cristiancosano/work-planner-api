@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Auditor;
+
 return [
 
     /*
@@ -40,6 +42,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'auditors' => [
+            'driver' => 'session',
+            'provider' => 'auditors'
+        ]
     ],
 
     /*
@@ -64,6 +70,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'auditors' => [
+            'driver' => 'eloquent',
+            'model' => Auditor::class
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

@@ -4,35 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditor;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class AuditorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Auditor  $auditor
-     * @return \Illuminate\Http\Response
+     * @param Auditor $auditor
+     * @return Response
      */
     public function show(Auditor $auditor)
     {
@@ -40,25 +23,43 @@ class AuditorController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Creates a new token for a valid (user & password) auditor.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Auditor  $auditor
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function update(Request $request, Auditor $auditor)
+    public function createToken(Request $request): Response
     {
-        //
+
+        $authenticated = Auth::guard('auditors')->attempt([
+            'email' => $request->get('email'),
+            'password' => $request->get('password')
+        ]);
+
+        if($authenticated)
+        {
+            $token = $request->user('auditors')->createToken($request->get('device'));
+            return response(['token' => $token->plainTextToken]);
+        }
+        else
+        {
+            return response(['message' => 'Invalid credentials'], 401);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Deletes a valid auditor token.
      *
-     * @param  \App\Models\Auditor  $auditor
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function destroy(Auditor $auditor)
+    public function deleteToken(Request $request): Response
     {
-        //
+        $message = ['status' => 'Failed to delete token'];
+        if($request->user()->currentAccessToken()->delete())
+        {
+            $message['status'] = 'Success';
+        }
+        return response($message);
     }
 }
