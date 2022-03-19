@@ -23,6 +23,6 @@ class AuditorPolicy
             ? Response::allow()
             : Response::deny(
                 "You only can show your own profile."
-            );;;
+            );
     }
 }
