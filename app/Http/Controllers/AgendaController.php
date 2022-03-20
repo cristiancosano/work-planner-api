@@ -26,6 +26,24 @@ class AgendaController extends Controller
     }
 
     /**
+     * Display a listing of agendas that belong to the current user.
+     *
+     * @param Request $request
+     * @return Response
+     */
+
+    public function indexByCurrentUser(Request $request): Response
+    {
+        return response(
+            Agenda
+                ::with('tasks')
+                ->where('auditor', '=', $request->user()->id)
+                ->paginate(15)
+        );
+
+    }
+
+    /**
      * Display the agenda.
      *
      * @param Agenda $agenda

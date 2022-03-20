@@ -17,4 +17,13 @@ class Auditor extends Authenticatable
         return $this->hasMany(Agenda::class, 'auditor');
     }
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+    ];
+
 }

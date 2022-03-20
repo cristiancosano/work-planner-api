@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function()
         Route::delete('token', [AuditorController::class, 'deleteToken'])->name('delete-token');
     });
 
+    Route::get('agendas/me', [AgendaController::class, 'indexByCurrentUser']);
+
     Route::resource('auditors', AuditorController::class)->only(['show']);
     Route::resource('agendas', AgendaController::class)->only(['index', 'show', 'update']);
     Route::resource('tasks', TaskController::class)->only(['show', 'update']);
